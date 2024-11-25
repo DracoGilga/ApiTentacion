@@ -1,59 +1,66 @@
 const express = require('express');
 const router = express.Router();
-const pedidoControlador = require('../controller/pedidoControlador');
+const administradorControlador = require('../controller/administradorControlador');
 
 /**
  * @swagger
  * tags:
- *   name: Pedidos
- *   description: Operaciones relacionadas con los pedidos
+ *   name: Administradores
+ *   description: Operaciones relacionadas con los administradores
  */
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     Pedido:
+ *     Administrador:
  *       type: object
  *       required:
- *         - productos
- *         - precioTotal
+ *         - nombre
+ *         - apellidos
+ *         - usuario
+ *         - telefono
+ *         - contrasena
  *       properties:
- *         productos:
- *           type: array
- *           items:
- *             type: string
- *             description: ID de los productos en el pedido
- *         precioTotal:
- *           type: number
- *           description: El precio total del pedido
- *         cliente:
- *           type: array
- *           items:
- *             type: string
- *             description: ID del cliente que realiza el pedido
+ *         nombre:
+ *           type: string
+ *           description: Nombre del administrador
+ *         apellidos:
+ *           type: string
+ *           description: Apellidos del administrador
+ *         usuario:
+ *           type: string
+ *           description: Usuario del administrador
+ *         telefono:
+ *           type: string
+ *           description: Número de teléfono del administrador
+ *         contrasena:
+ *           type: string
+ *           description: Contraseña del administrador
  *       example:
- *         productos: ["60d73adf9f1b2c001f0b4e1b", "60d73adf9f1b2c001f0b4e1c"]
- *         precioTotal: 150
- *         cliente: ["60d73adf9f1b2c001f0b4e2d"]
+ *         nombre: "Juan"
+ *         apellidos: "Pérez García"
+ *         usuario: "juanperez"
+ *         telefono: "123456789"
+ *         contrasena: "123456"
  */
 
 /**
  * @swagger
- * /pedidos:
+ * /administradores:
  *   post:
- *     tags: [Pedidos]
- *     summary: Crear un nuevo pedido
- *     description: Crea un nuevo pedido con los productos seleccionados.
+ *     tags: [Administradores]
+ *     summary: Crear un nuevo administrador
+ *     description: Crea un nuevo administrador en la base de datos.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pedido'
+ *             $ref: '#/components/schemas/Administrador'
  *     responses:
  *       201:
- *         description: Pedido creado exitosamente
+ *         description: Administrador creado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -61,17 +68,8 @@ const pedidoControlador = require('../controller/pedidoControlador');
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
- *       400:
- *         description: Datos inválidos (productos vacíos o no encontrados)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *                 administrador:
+ *                   $ref: '#/components/schemas/Administrador'
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -84,24 +82,24 @@ const pedidoControlador = require('../controller/pedidoControlador');
  *                 error:
  *                   type: string
  */
-router.post('/', pedidoControlador.crearPedido);
+router.post('/', administradorControlador.crearAdministrador);
 
 /**
  * @swagger
- * /pedidos:
+ * /administradores:
  *   get:
- *     tags: [Pedidos]
- *     summary: Obtener todos los pedidos
- *     description: Obtiene una lista de todos los pedidos realizados.
+ *     tags: [Administradores]
+ *     summary: Obtener todos los administradores
+ *     description: Obtiene la lista de todos los administradores registrados.
  *     responses:
  *       200:
- *         description: Lista de pedidos obtenida exitosamente
+ *         description: Lista de administradores obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Pedido'
+ *                 $ref: '#/components/schemas/Administrador'
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -114,31 +112,31 @@ router.post('/', pedidoControlador.crearPedido);
  *                 error:
  *                   type: string
  */
-router.get('/', pedidoControlador.obtenerPedidos);
+router.get('/', administradorControlador.obtenerAdministradores);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /administradores/{id}:
  *   get:
- *     tags: [Pedidos]
- *     summary: Obtener un pedido por ID
- *     description: Recupera los detalles de un pedido específico por su ID.
+ *     tags: [Administradores]
+ *     summary: Obtener un administrador por ID
+ *     description: Recupera un administrador específico mediante su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID del administrador
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Pedido obtenido exitosamente
+ *         description: Administrador obtenido exitosamente
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Pedido'
+ *               $ref: '#/components/schemas/Administrador'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Administrador no encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -158,20 +156,20 @@ router.get('/', pedidoControlador.obtenerPedidos);
  *                 error:
  *                   type: string
  */
-router.get('/:id', pedidoControlador.obtenerPedidoPorId);
+router.get('/:id', administradorControlador.obtenerAdministradorPorId);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /administradores/{id}:
  *   put:
- *     tags: [Pedidos]
- *     summary: Actualizar un pedido por ID
- *     description: Actualiza un pedido existente por su ID, solo se permiten modificaciones en los productos.
+ *     tags: [Administradores]
+ *     summary: Actualizar un administrador por ID
+ *     description: Actualiza los datos de un administrador existente por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID del administrador
  *         schema:
  *           type: string
  *     requestBody:
@@ -179,10 +177,10 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pedido'
+ *             $ref: '#/components/schemas/Administrador'
  *     responses:
  *       200:
- *         description: Pedido actualizado exitosamente
+ *         description: Administrador actualizado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -190,19 +188,10 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
- *       400:
- *         description: Datos inválidos (productos vacíos o no encontrados)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *                 administrador:
+ *                   $ref: '#/components/schemas/Administrador'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Administrador no encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -222,25 +211,25 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', pedidoControlador.actualizarPedido);
+router.put('/:id', administradorControlador.actualizarAdministrador);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /administradores/{id}:
  *   delete:
- *     tags: [Pedidos]
- *     summary: Eliminar un pedido por ID
- *     description: Elimina un pedido específico por su ID.
+ *     tags: [Administradores]
+ *     summary: Eliminar un administrador por ID
+ *     description: Elimina un administrador por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID del administrador
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Pedido eliminado exitosamente
+ *         description: Administrador eliminado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -248,10 +237,10 @@ router.put('/:id', pedidoControlador.actualizarPedido);
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
+ *                 administrador:
+ *                   $ref: '#/components/schemas/Administrador'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Administrador no encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -271,6 +260,6 @@ router.put('/:id', pedidoControlador.actualizarPedido);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', pedidoControlador.eliminarPedido);
+router.delete('/:id', administradorControlador.eliminarAdministrador);
 
 module.exports = router;

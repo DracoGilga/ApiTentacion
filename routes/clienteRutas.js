@@ -1,59 +1,72 @@
 const express = require('express');
 const router = express.Router();
-const pedidoControlador = require('../controller/pedidoControlador');
+const clienteControlador = require('../controller/clienteControlador');
 
 /**
  * @swagger
  * tags:
- *   name: Pedidos
- *   description: Operaciones relacionadas con los pedidos
+ *   name: Clientes
+ *   description: Operaciones relacionadas con los clientes
  */
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     Pedido:
+ *     Cliente:
  *       type: object
  *       required:
- *         - productos
- *         - precioTotal
+ *         - nombre
+ *         - apellidos
+ *         - telefono
+ *         - fechaNacimiento
+ *         - correo
+ *         - contrasena
  *       properties:
- *         productos:
- *           type: array
- *           items:
- *             type: string
- *             description: ID de los productos en el pedido
- *         precioTotal:
- *           type: number
- *           description: El precio total del pedido
- *         cliente:
- *           type: array
- *           items:
- *             type: string
- *             description: ID del cliente que realiza el pedido
+ *         nombre:
+ *           type: string
+ *           description: Nombre del cliente
+ *         apellidos:
+ *           type: string
+ *           description: Apellidos del cliente
+ *         telefono:
+ *           type: string
+ *           description: Teléfono del cliente (cifrado)
+ *         fechaNacimiento:
+ *           type: string
+ *           format: date
+ *           description: Fecha de nacimiento del cliente
+ *         correo:
+ *           type: string
+ *           description: Correo electrónico del cliente (cifrado)
+ *         contrasena:
+ *           type: string
+ *           description: Contraseña del cliente (cifrada)
  *       example:
- *         productos: ["60d73adf9f1b2c001f0b4e1b", "60d73adf9f1b2c001f0b4e1c"]
- *         precioTotal: 150
- *         cliente: ["60d73adf9f1b2c001f0b4e2d"]
+ *         nombre: Juan
+ *         apellidos: Pérez García
+ *         telefono: "123456789"
+ *         fechaNacimiento: "1985-04-15"
+ *         correo: "juan.perez@example.com"
+ *         contrasena: "password123"
  */
 
 /**
  * @swagger
- * /pedidos:
+ * /clientes:
  *   post:
- *     tags: [Pedidos]
- *     summary: Crear un nuevo pedido
- *     description: Crea un nuevo pedido con los productos seleccionados.
+ *     tags: [Clientes]
+ *     summary: Crear un nuevo cliente
+ *     description: Crea un nuevo cliente con los datos proporcionados.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pedido'
+ *             $ref: '#/components/schemas/Cliente'
  *     responses:
  *       201:
- *         description: Pedido creado exitosamente
+ *         description: Cliente creado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -61,17 +74,8 @@ const pedidoControlador = require('../controller/pedidoControlador');
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
- *       400:
- *         description: Datos inválidos (productos vacíos o no encontrados)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *                 cliente:
+ *                   $ref: '#/components/schemas/Cliente'
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -84,24 +88,24 @@ const pedidoControlador = require('../controller/pedidoControlador');
  *                 error:
  *                   type: string
  */
-router.post('/', pedidoControlador.crearPedido);
+router.post('/', clienteControlador.crearCliente);
 
 /**
  * @swagger
- * /pedidos:
+ * /clientes:
  *   get:
- *     tags: [Pedidos]
- *     summary: Obtener todos los pedidos
- *     description: Obtiene una lista de todos los pedidos realizados.
+ *     tags: [Clientes]
+ *     summary: Obtener todos los clientes
+ *     description: Obtiene una lista de todos los clientes.
  *     responses:
  *       200:
- *         description: Lista de pedidos obtenida exitosamente
+ *         description: Lista de clientes obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Pedido'
+ *                 $ref: '#/components/schemas/Cliente'
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -114,31 +118,31 @@ router.post('/', pedidoControlador.crearPedido);
  *                 error:
  *                   type: string
  */
-router.get('/', pedidoControlador.obtenerPedidos);
+router.get('/', clienteControlador.obtenerClientes);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /clientes/{id}:
  *   get:
- *     tags: [Pedidos]
- *     summary: Obtener un pedido por ID
- *     description: Recupera los detalles de un pedido específico por su ID.
+ *     tags: [Clientes]
+ *     summary: Obtener un cliente por ID
+ *     description: Recupera los detalles de un cliente específico por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID del cliente
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Pedido obtenido exitosamente
+ *         description: Cliente obtenido exitosamente
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Pedido'
+ *               $ref: '#/components/schemas/Cliente'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Cliente no encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -158,20 +162,20 @@ router.get('/', pedidoControlador.obtenerPedidos);
  *                 error:
  *                   type: string
  */
-router.get('/:id', pedidoControlador.obtenerPedidoPorId);
+router.get('/:id', clienteControlador.obtenerClientePorId);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /clientes/{id}:
  *   put:
- *     tags: [Pedidos]
- *     summary: Actualizar un pedido por ID
- *     description: Actualiza un pedido existente por su ID, solo se permiten modificaciones en los productos.
+ *     tags: [Clientes]
+ *     summary: Actualizar un cliente por ID
+ *     description: Actualiza los datos de un cliente existente por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID del cliente
  *         schema:
  *           type: string
  *     requestBody:
@@ -179,10 +183,10 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pedido'
+ *             $ref: '#/components/schemas/Cliente'
  *     responses:
  *       200:
- *         description: Pedido actualizado exitosamente
+ *         description: Cliente actualizado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -190,19 +194,10 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
- *       400:
- *         description: Datos inválidos (productos vacíos o no encontrados)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *                 cliente:
+ *                   $ref: '#/components/schemas/Cliente'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Cliente no encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -222,25 +217,25 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', pedidoControlador.actualizarPedido);
+router.put('/:id', clienteControlador.actualizarCliente);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /clientes/{id}:
  *   delete:
- *     tags: [Pedidos]
- *     summary: Eliminar un pedido por ID
- *     description: Elimina un pedido específico por su ID.
+ *     tags: [Clientes]
+ *     summary: Eliminar un cliente por ID
+ *     description: Elimina un cliente específico por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID del cliente
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Pedido eliminado exitosamente
+ *         description: Cliente eliminado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -248,10 +243,10 @@ router.put('/:id', pedidoControlador.actualizarPedido);
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
+ *                 cliente:
+ *                   $ref: '#/components/schemas/Cliente'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Cliente no encontrado
  *         content:
  *           application/json:
  *             schema:
@@ -271,6 +266,6 @@ router.put('/:id', pedidoControlador.actualizarPedido);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', pedidoControlador.eliminarPedido);
+router.delete('/:id', clienteControlador.eliminarCliente);
 
 module.exports = router;

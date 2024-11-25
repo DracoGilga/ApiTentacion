@@ -23,7 +23,8 @@ const crearPedido = async (req, res) => {
         // Crear el nuevo pedido
         const nuevoPedido = new Pedido({
             productos,
-            precioTotal
+            precioTotal,
+            cliente
         });
 
         await nuevoPedido.save();
@@ -86,7 +87,8 @@ const actualizarPedido = async (req, res) => {
             id,
             {
                 productos,
-                precioTotal
+                precioTotal,
+                cliente
             },
             { new: true, runValidators: true }
         ).populate('productos');

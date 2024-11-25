@@ -1,59 +1,57 @@
 const express = require('express');
 const router = express.Router();
-const pedidoControlador = require('../controller/pedidoControlador');
+const sucursalControlador = require('../controller/sucursalControlador');
 
 /**
  * @swagger
  * tags:
- *   name: Pedidos
- *   description: Operaciones relacionadas con los pedidos
+ *   name: Sucursales
+ *   description: Operaciones relacionadas con las sucursales
  */
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     Pedido:
+ *     Sucursal:
  *       type: object
  *       required:
- *         - productos
- *         - precioTotal
+ *         - nombre
+ *         - ubicacion
  *       properties:
- *         productos:
+ *         nombre:
+ *           type: string
+ *           description: Nombre de la sucursal
+ *         ubicacion:
+ *           type: string
+ *           description: ID de la ubicación de la sucursal
+ *         pedidos:
  *           type: array
  *           items:
  *             type: string
- *             description: ID de los productos en el pedido
- *         precioTotal:
- *           type: number
- *           description: El precio total del pedido
- *         cliente:
- *           type: array
- *           items:
- *             type: string
- *             description: ID del cliente que realiza el pedido
+ *           description: Lista de pedidos asociados con la sucursal
  *       example:
- *         productos: ["60d73adf9f1b2c001f0b4e1b", "60d73adf9f1b2c001f0b4e1c"]
- *         precioTotal: 150
- *         cliente: ["60d73adf9f1b2c001f0b4e2d"]
+ *         nombre: Sucursal Centro
+ *         ubicacion: "647b9b9f5d1a3d41d6abf238"
+ *         pedidos: ["647b9bb45d1a3d41d6abf239", "647b9bb45d1a3d41d6abf240"]
  */
 
 /**
  * @swagger
- * /pedidos:
+ * /sucursales:
  *   post:
- *     tags: [Pedidos]
- *     summary: Crear un nuevo pedido
- *     description: Crea un nuevo pedido con los productos seleccionados.
+ *     tags: [Sucursales]
+ *     summary: Crear una nueva sucursal
+ *     description: Crea una nueva sucursal con los datos proporcionados.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pedido'
+ *             $ref: '#/components/schemas/Sucursal'
  *     responses:
  *       201:
- *         description: Pedido creado exitosamente
+ *         description: Sucursal creada exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -61,10 +59,10 @@ const pedidoControlador = require('../controller/pedidoControlador');
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
- *       400:
- *         description: Datos inválidos (productos vacíos o no encontrados)
+ *                 sucursal:
+ *                   $ref: '#/components/schemas/Sucursal'
+ *       404:
+ *         description: Ubicación no encontrada
  *         content:
  *           application/json:
  *             schema:
@@ -84,24 +82,24 @@ const pedidoControlador = require('../controller/pedidoControlador');
  *                 error:
  *                   type: string
  */
-router.post('/', pedidoControlador.crearPedido);
+router.post('/', sucursalControlador.crearSucursal);
 
 /**
  * @swagger
- * /pedidos:
+ * /sucursales:
  *   get:
- *     tags: [Pedidos]
- *     summary: Obtener todos los pedidos
- *     description: Obtiene una lista de todos los pedidos realizados.
+ *     tags: [Sucursales]
+ *     summary: Obtener todas las sucursales
+ *     description: Obtiene una lista de todas las sucursales con los detalles de los pedidos y la ubicación.
  *     responses:
  *       200:
- *         description: Lista de pedidos obtenida exitosamente
+ *         description: Lista de sucursales obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Pedido'
+ *                 $ref: '#/components/schemas/Sucursal'
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -114,31 +112,31 @@ router.post('/', pedidoControlador.crearPedido);
  *                 error:
  *                   type: string
  */
-router.get('/', pedidoControlador.obtenerPedidos);
+router.get('/', sucursalControlador.obtenerSucursales);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /sucursales/{id}:
  *   get:
- *     tags: [Pedidos]
- *     summary: Obtener un pedido por ID
- *     description: Recupera los detalles de un pedido específico por su ID.
+ *     tags: [Sucursales]
+ *     summary: Obtener una sucursal por ID
+ *     description: Recupera los detalles de una sucursal específica por su ID, incluyendo pedidos y ubicación.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID de la sucursal
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Pedido obtenido exitosamente
+ *         description: Sucursal obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Pedido'
+ *               $ref: '#/components/schemas/Sucursal'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Sucursal no encontrada
  *         content:
  *           application/json:
  *             schema:
@@ -158,20 +156,20 @@ router.get('/', pedidoControlador.obtenerPedidos);
  *                 error:
  *                   type: string
  */
-router.get('/:id', pedidoControlador.obtenerPedidoPorId);
+router.get('/:id', sucursalControlador.obtenerSucursalPorId);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /sucursales/{id}:
  *   put:
- *     tags: [Pedidos]
- *     summary: Actualizar un pedido por ID
- *     description: Actualiza un pedido existente por su ID, solo se permiten modificaciones en los productos.
+ *     tags: [Sucursales]
+ *     summary: Actualizar una sucursal por ID
+ *     description: Actualiza los detalles de una sucursal existente por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID de la sucursal
  *         schema:
  *           type: string
  *     requestBody:
@@ -179,10 +177,10 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Pedido'
+ *             $ref: '#/components/schemas/Sucursal'
  *     responses:
  *       200:
- *         description: Pedido actualizado exitosamente
+ *         description: Sucursal actualizada exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -190,19 +188,10 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
- *       400:
- *         description: Datos inválidos (productos vacíos o no encontrados)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
+ *                 sucursal:
+ *                   $ref: '#/components/schemas/Sucursal'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Sucursal no encontrada
  *         content:
  *           application/json:
  *             schema:
@@ -222,25 +211,25 @@ router.get('/:id', pedidoControlador.obtenerPedidoPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', pedidoControlador.actualizarPedido);
+router.put('/:id', sucursalControlador.actualizarSucursal);
 
 /**
  * @swagger
- * /pedidos/{id}:
+ * /sucursales/{id}:
  *   delete:
- *     tags: [Pedidos]
- *     summary: Eliminar un pedido por ID
- *     description: Elimina un pedido específico por su ID.
+ *     tags: [Sucursales]
+ *     summary: Eliminar una sucursal por ID
+ *     description: Elimina una sucursal específica por su ID.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del pedido
+ *         description: ID de la sucursal
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Pedido eliminado exitosamente
+ *         description: Sucursal eliminada exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -248,10 +237,10 @@ router.put('/:id', pedidoControlador.actualizarPedido);
  *               properties:
  *                 message:
  *                   type: string
- *                 pedido:
- *                   $ref: '#/components/schemas/Pedido'
+ *                 sucursal:
+ *                   $ref: '#/components/schemas/Sucursal'
  *       404:
- *         description: Pedido no encontrado
+ *         description: Sucursal no encontrada
  *         content:
  *           application/json:
  *             schema:
@@ -271,6 +260,6 @@ router.put('/:id', pedidoControlador.actualizarPedido);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', pedidoControlador.eliminarPedido);
+router.delete('/:id', sucursalControlador.eliminarSucursal);
 
 module.exports = router;

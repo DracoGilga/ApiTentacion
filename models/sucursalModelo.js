@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Pedido = require('./pedidosModelo'); // Asegúrate de importar correctamente el modelo Pedido
+const Ubicacion = require('./ubicacionModelo'); // Asegúrate de importar correctamente el modelo Ubicacion
 
 const sucursalEsquema = new mongoose.Schema({
     pedidos: [
@@ -8,8 +9,13 @@ const sucursalEsquema = new mongoose.Schema({
             ref: 'Pedido', // Referencia al modelo Pedido
         }
     ],
-    ubicacion: {
+    nombre: {
         type: String,
+        required: true,
+    },
+    ubicacion: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ubicacion',
         required: true,
     },
 });

@@ -30,6 +30,9 @@ const productoRutas = require('./routes/productoRutas');
 const categoriaProductoRutas = require('./routes/categoriaProductoRutas');
 const pedidoRutas = require('./routes/pedidoRutas');
 const insumosRutas = require('./routes/insumosRutas');
+const clienteRutas = require('./routes/clienteRutas');
+const administradorRutas = require('./routes/administradorRutas')
+const sucursalRutas = require('./routes/sucursalRutas');
 
 // Usar las rutas
 app.use('/ubicaciones', ubicacionRutas);
@@ -37,6 +40,9 @@ app.use('/productos', productoRutas);
 app.use('/categoriasProducto', categoriaProductoRutas);
 app.use('/pedidos', pedidoRutas);
 app.use('/insumos', insumosRutas);
+app.use('/clientes', clienteRutas);
+app.use('/administradores', administradorRutas);
+app.use('/sucursales', sucursalRutas);
 
 // Middleware de error
 app.use(errorMiddleware);

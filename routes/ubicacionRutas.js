@@ -1,7 +1,8 @@
 const express = require('express');
 const ubicacionControlador = require('../controller/ubicacionControlador');
-
 const router = express.Router();
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
+
 
 /**
  * @swagger
@@ -73,7 +74,7 @@ const router = express.Router();
  *                 error:
  *                   type: string
  */
-router.post('/', ubicacionControlador.crearUbicacion);
+router.post('/', verificarTokenYRol('administrador'), ubicacionControlador.crearUbicacion);
 
 /**
  * @swagger
@@ -206,7 +207,7 @@ router.get('/:id', ubicacionControlador.obtenerUbicacionPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', ubicacionControlador.actualizarUbicacion);
+router.put('/:id', verificarTokenYRol('administrador'), ubicacionControlador.actualizarUbicacion);
 
 /**
  * @swagger
@@ -246,6 +247,6 @@ router.put('/:id', ubicacionControlador.actualizarUbicacion);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', ubicacionControlador.eliminarUbicacion);
+router.delete('/:id', verificarTokenYRol('administrador'), ubicacionControlador.eliminarUbicacion);
 
 module.exports = router;

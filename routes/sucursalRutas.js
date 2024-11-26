@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sucursalControlador = require('../controller/sucursalControlador');
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
 
 /**
  * @swagger
@@ -82,7 +83,7 @@ const sucursalControlador = require('../controller/sucursalControlador');
  *                 error:
  *                   type: string
  */
-router.post('/', sucursalControlador.crearSucursal);
+router.post('/', verificarTokenYRol('administrador'), sucursalControlador.crearSucursal);
 
 /**
  * @swagger
@@ -211,7 +212,7 @@ router.get('/:id', sucursalControlador.obtenerSucursalPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', sucursalControlador.actualizarSucursal);
+router.put('/:id', verificarTokenYRol('administrador'), sucursalControlador.actualizarSucursal);
 
 /**
  * @swagger
@@ -260,6 +261,6 @@ router.put('/:id', sucursalControlador.actualizarSucursal);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', sucursalControlador.eliminarSucursal);
+router.delete('/:id', verificarTokenYRol('administrador'), sucursalControlador.eliminarSucursal);
 
 module.exports = router;

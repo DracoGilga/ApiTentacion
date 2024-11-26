@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const clienteControlador = require('../controller/clienteControlador');
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
 
 /**
  * @swagger
@@ -118,7 +119,7 @@ router.post('/', clienteControlador.crearCliente);
  *                 error:
  *                   type: string
  */
-router.get('/', clienteControlador.obtenerClientes);
+router.get('/', verificarTokenYRol('administrador'), clienteControlador.obtenerClientes);
 
 /**
  * @swagger
@@ -162,7 +163,7 @@ router.get('/', clienteControlador.obtenerClientes);
  *                 error:
  *                   type: string
  */
-router.get('/:id', clienteControlador.obtenerClientePorId);
+router.get('/:id', verificarTokenYRol('administrador'), clienteControlador.obtenerClientePorId);
 
 /**
  * @swagger
@@ -266,6 +267,6 @@ router.put('/:id', clienteControlador.actualizarCliente);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', clienteControlador.eliminarCliente);
+router.delete('/:id', verificarTokenYRol('administrador'), clienteControlador.eliminarCliente);
 
 module.exports = router;

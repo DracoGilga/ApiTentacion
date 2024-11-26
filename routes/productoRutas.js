@@ -1,6 +1,7 @@
 const express = require('express');
 const productoControlador = require('../controller/productoControlador');
 const router = express.Router();
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
 
 /**
  * @swagger
@@ -91,7 +92,7 @@ const router = express.Router();
  *                 error:
  *                   type: string
  */
-router.post('/', productoControlador.crearProducto);
+router.post('/', verificarTokenYRol('administrador'), productoControlador.crearProducto);
 
 /**
  * @swagger
@@ -220,7 +221,7 @@ router.get('/:id', productoControlador.obtenerProductoPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', productoControlador.actualizarProducto);
+router.put('/:id', verificarTokenYRol('administrador'), productoControlador.actualizarProducto);
 
 /**
  * @swagger
@@ -269,6 +270,6 @@ router.put('/:id', productoControlador.actualizarProducto);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', productoControlador.eliminarProducto);
+router.delete('/:id', verificarTokenYRol('administrador'), productoControlador.eliminarProducto);
 
 module.exports = router;

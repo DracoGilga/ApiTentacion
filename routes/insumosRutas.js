@@ -8,6 +8,8 @@ const {
     eliminarInsumo,
     calcularCosteo
 } = require('../controller/insumoControlador');
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
+
 
 /**
  * @swagger
@@ -79,7 +81,7 @@ const {
  *                 error:
  *                   type: string
  */
-router.post('/', crearInsumo);
+router.post('/', verificarTokenYRol('administrador'), crearInsumo);
 
 /**
  * @swagger
@@ -109,7 +111,7 @@ router.post('/', crearInsumo);
  *                 error:
  *                   type: string
  */
-router.get('/', obtenerInsumos);
+router.get('/', verificarTokenYRol('administrador'), obtenerInsumos);
 
 /**
  * @swagger
@@ -153,7 +155,7 @@ router.get('/', obtenerInsumos);
  *                 error:
  *                   type: string
  */
-router.get('/:id', obtenerInsumoPorId);
+router.get('/:id', verificarTokenYRol('administrador'), obtenerInsumoPorId);
 
 /**
  * @swagger
@@ -208,7 +210,7 @@ router.get('/:id', obtenerInsumoPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', actualizarInsumo);
+router.put('/:id', verificarTokenYRol('administrador'), actualizarInsumo);
 
 /**
  * @swagger
@@ -257,7 +259,7 @@ router.put('/:id', actualizarInsumo);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', eliminarInsumo);
+router.delete('/:id', verificarTokenYRol('administrador'), eliminarInsumo);
 
 /**
  * @swagger
@@ -313,6 +315,6 @@ router.delete('/:id', eliminarInsumo);
  *                 error:
  *                   type: string
  */
-router.post('/costeo', calcularCosteo);
+router.post('/costeo', verificarTokenYRol('administrador'), calcularCosteo);
 
 module.exports = router;

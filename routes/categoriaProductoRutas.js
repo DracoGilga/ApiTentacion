@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const categoriaProductoControlador = require('../controller/categoriaProductoControlador');
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
 
 /**
  * @swagger
@@ -67,7 +68,7 @@ const categoriaProductoControlador = require('../controller/categoriaProductoCon
  *                 error:
  *                   type: string
  */
-router.post('/', categoriaProductoControlador.crearCategoriaProducto);
+router.post('/', verificarTokenYRol('administrador'), categoriaProductoControlador.crearCategoriaProducto);
 
 /**
  * @swagger
@@ -196,7 +197,7 @@ router.get('/:id', categoriaProductoControlador.obtenerCategoriaProductoPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', categoriaProductoControlador.actualizarCategoriaProducto);
+router.put('/:id', verificarTokenYRol('administrador'), categoriaProductoControlador.actualizarCategoriaProducto);
 
 /**
  * @swagger
@@ -245,6 +246,6 @@ router.put('/:id', categoriaProductoControlador.actualizarCategoriaProducto);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', categoriaProductoControlador.eliminarCategoriaProducto);
+router.delete('/:id', verificarTokenYRol('administrador'), categoriaProductoControlador.eliminarCategoriaProducto);
 
 module.exports = router;

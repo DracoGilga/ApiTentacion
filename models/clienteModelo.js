@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { cifrarTexto, descifrarTexto } = require('../utils/cifrado');
+const { cifrarTexto } = require('../utils/cifrado'); // Solo ciframos, no necesitamos descifrar
 const { validarCliente } = require('../middlewares/clienteMiddleware');
 
 const clienteEsquema = new mongoose.Schema({
@@ -15,7 +15,6 @@ const clienteEsquema = new mongoose.Schema({
         type: String,
         required: true,
         set: cifrarTexto, // Cifra el número de teléfono al guardarlo
-        get: descifrarTexto, // Lo descifra al obtenerlo
     },
     fechaNacimiento: {
         type: Date,
@@ -26,13 +25,15 @@ const clienteEsquema = new mongoose.Schema({
         required: true,
         unique: true,
         set: cifrarTexto, // Cifra el correo al guardarlo
-        get: descifrarTexto, // Lo descifra al obtenerlo
     },
     contrasena: {
         type: String,
         required: true,
         set: cifrarTexto, // Cifra la contraseña al guardarla
-        get: descifrarTexto, // La descifra al obtenerla
+    },
+    rol: {
+        type: String,
+        default: 'cliente', // Define el rol predeterminado
     },
 });
 

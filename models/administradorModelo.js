@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { cifrarTexto, descifrarTexto } = require('../utils/cifrado');
+const { cifrarTexto } = require('../utils/cifrado'); // Solo ciframos, no necesitamos descifrar
 const { validarAdministrador } = require('../middlewares/administradorMiddleware');
 
 const administradorEsquema = new mongoose.Schema({
@@ -16,19 +16,20 @@ const administradorEsquema = new mongoose.Schema({
         required: true,
         unique: true,
         set: cifrarTexto, // Cifra el número de teléfono al guardarlo
-        get: descifrarTexto, // Lo descifra al obtenerlo
     },
     telefono: {
         type: String,
         required: true,
         set: cifrarTexto, // Cifra el número de teléfono al guardarlo
-        get: descifrarTexto, // Lo descifra al obtenerlo
     },
     contrasena: {
         type: String,
         required: true,
-        set: cifrarTexto, // Cifra el número de teléfono al guardarlo
-        get: descifrarTexto, // Lo descifra al obtenerlo
+        set: cifrarTexto, // Cifra la contraseña al guardarla
+    },
+    rol: {
+        type: String,
+        default: 'administrador', // Define el rol predeterminado
     },
 });
 

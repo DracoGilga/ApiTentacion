@@ -1,30 +1,23 @@
 const crypto = require('crypto');
 
+// Asegúrate de que las claves y el IV se obtienen correctamente desde el archivo .env
+const clave = Buffer.from(process.env.CRYPTO_KEY, 'hex');  // Debería ser una cadena hexadecimal de 32 bytes
+const iv = Buffer.from(process.env.CRYPTO_IV, 'hex');      // Debería ser una cadena hexadecimal de 16 bytes
+
 const algoritmo = 'aes-256-cbc';
-const clave = crypto.randomBytes(32);
-const iv = crypto.randomBytes(16);
 
 const cifrarTexto = (texto) => {
-    const cipher = crypto.createCipheriv(algoritmo, Buffer.from(clave), iv);
+    const cipher = crypto.createCipheriv(algoritmo, clave, iv);
     let cifrado = cipher.update(texto);
     cifrado = Buffer.concat([cifrado, cipher.final()]);
     return iv.toString('hex') + ':' + cifrado.toString('hex');
 };
 
-const descifrarTexto = (texto) => {
-    const textoPartes = texto.split(':');
-    const iv = Buffer.from(textoPartes.shift(), 'hex');
-    const cifrado = Buffer.from(textoPartes.join(':'), 'hex');
-    const decipher = crypto.createDecipheriv(algoritmo, Buffer.from(clave), iv);
-    let descifrado = decipher.update(cifrado);
-    descifrado = Buffer.concat([descifrado, decipher.final()]);
-    return descifrado.toString();
-};
-
 // Nueva función para comparar contraseñas
 const compararContrasena = (contrasenaIngresada, contrasenaAlmacenada) => {
-    const contrasenaDescifrada = descifrarTexto(contrasenaAlmacenada);
-    return contrasenaIngresada === contrasenaDescifrada;
+    // Cifrar la contrasena ingresada para compararla con la contrasena almacenada
+    const contrasenaIngresadaCifrada = cifrarTexto(contrasenaIngresada);
+    return contrasenaIngresadaCifrada === contrasenaAlmacenada;
 };
 
-module.exports = { cifrarTexto, descifrarTexto, compararContrasena };
+module.exports = { cifrarTexto, compararContrasena };

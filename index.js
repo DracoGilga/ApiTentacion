@@ -1,9 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const conectarBaseDatos = require('./config/database/conexion');
 const insertarDatosIniciales = require('./config/database/integracion');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const swaggerDocs = require('./docs/swagger');
-require('dotenv').config();
 
 const app = express();
 const puerto = process.env.PORT || 3003;
@@ -33,8 +33,10 @@ const insumosRutas = require('./routes/insumosRutas');
 const clienteRutas = require('./routes/clienteRutas');
 const administradorRutas = require('./routes/administradorRutas')
 const sucursalRutas = require('./routes/sucursalRutas');
+const loginRutas = require('./routes/loginRutas');
 
 // Usar las rutas
+app.use('/auth', loginRutas); // Ruta para login
 app.use('/ubicaciones', ubicacionRutas);
 app.use('/productos', productoRutas);
 app.use('/categoriasProducto', categoriaProductoRutas);

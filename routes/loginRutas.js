@@ -59,6 +59,6 @@ const router = express.Router();
  */
 
 // Ruta de login
-router.post('/login', login);
+router.post('/', login);
 
 module.exports = router;

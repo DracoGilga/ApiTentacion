@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const administradorControlador = require('../controller/administradorControlador');
+const { verificarTokenYRol } = require('../middlewares/autorizacionMiddleware');
 
 /**
  * @swagger
@@ -82,7 +83,7 @@ const administradorControlador = require('../controller/administradorControlador
  *                 error:
  *                   type: string
  */
-router.post('/', administradorControlador.crearAdministrador);
+router.post('/', verificarTokenYRol('administrador'), administradorControlador.crearAdministrador);
 
 /**
  * @swagger
@@ -112,7 +113,7 @@ router.post('/', administradorControlador.crearAdministrador);
  *                 error:
  *                   type: string
  */
-router.get('/', administradorControlador.obtenerAdministradores);
+router.get('/', verificarTokenYRol('administrador'), administradorControlador.obtenerAdministradores);
 
 /**
  * @swagger
@@ -156,7 +157,7 @@ router.get('/', administradorControlador.obtenerAdministradores);
  *                 error:
  *                   type: string
  */
-router.get('/:id', administradorControlador.obtenerAdministradorPorId);
+router.get('/:id', verificarTokenYRol('administrador'), administradorControlador.obtenerAdministradorPorId);
 
 /**
  * @swagger
@@ -211,7 +212,7 @@ router.get('/:id', administradorControlador.obtenerAdministradorPorId);
  *                 error:
  *                   type: string
  */
-router.put('/:id', administradorControlador.actualizarAdministrador);
+router.put('/:id', verificarTokenYRol('administrador'), administradorControlador.actualizarAdministrador);
 
 /**
  * @swagger
@@ -260,6 +261,6 @@ router.put('/:id', administradorControlador.actualizarAdministrador);
  *                 error:
  *                   type: string
  */
-router.delete('/:id', administradorControlador.eliminarAdministrador);
+router.delete('/:id', verificarTokenYRol('administrador'), administradorControlador.eliminarAdministrador);
 
 module.exports = router;

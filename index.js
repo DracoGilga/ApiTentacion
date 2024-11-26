@@ -4,9 +4,16 @@ const conectarBaseDatos = require('./config/database/conexion');
 const insertarDatosIniciales = require('./config/database/integracion');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const swaggerDocs = require('./docs/swagger');
+const cors = require('cors');
 
 const app = express();
 const puerto = process.env.PORT || 3003;
+
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 conectarBaseDatos()
     .catch(err => {
@@ -25,6 +32,7 @@ app.use(express.json());
 swaggerDocs(app);
 
 // Importar rutas
+const loginRutas = require('./routes/loginRutas');
 const ubicacionRutas = require('./routes/ubicacionRutas');
 const productoRutas = require('./routes/productoRutas');
 const categoriaProductoRutas = require('./routes/categoriaProductoRutas');
@@ -33,10 +41,9 @@ const insumosRutas = require('./routes/insumosRutas');
 const clienteRutas = require('./routes/clienteRutas');
 const administradorRutas = require('./routes/administradorRutas')
 const sucursalRutas = require('./routes/sucursalRutas');
-const loginRutas = require('./routes/loginRutas');
 
 // Usar las rutas
-app.use('/auth', loginRutas); // Ruta para login
+app.use('/login', loginRutas); // Ruta para login
 app.use('/ubicaciones', ubicacionRutas);
 app.use('/productos', productoRutas);
 app.use('/categoriasProducto', categoriaProductoRutas);

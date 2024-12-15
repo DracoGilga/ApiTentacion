@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const { conectorBDNube } = require('./config/database/conexion');
-const {insertarDatosIniciales} = require('./config/database/integracion');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const swaggerDocs = require('./docs/swagger');
 const cors = require('cors');
@@ -22,7 +21,6 @@ try {
     res.status(500).send('Internal Server Error');
 }
 
-//insertarDatosIniciales();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

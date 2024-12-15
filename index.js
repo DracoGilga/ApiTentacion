@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const conectarBaseDatos = require('./config/database/conexion');
-const insertarDatosIniciales = require('./config/database/integracion');
+const { conectorBDNube } = require('./config/database/conexion');
+const {insertarDatosIniciales} = require('./config/database/integracion');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 const swaggerDocs = require('./docs/swagger');
 const cors = require('cors');
@@ -15,13 +15,12 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-conectarBaseDatos()
-    .catch(err => {
-        console.error('No se pudo conectar a la base de datos. El servidor no se iniciará.');
-        process.exit(1);
-    });
-
-// La primera vez que ejecutes la API con exito, comentá la siguiente línea para evitar que se inserten los datos iniciales cada vez que se inicie el servidor
+try {
+    conectorBDNube();
+} catch (error) {
+    console.error('Error connecting to database:', error);
+    res.status(500).send('Internal Server Error');
+}
 
 //insertarDatosIniciales();
 

@@ -6,7 +6,7 @@ const swaggerDocs = require('./docs/swagger');
 const cors = require('cors');
 
 const app = express();
-const puerto = process.env.PORT || 3003;
+const puerto = process.env.PORT;
 
 const corsOptions = {
     origin: '*',

@@ -4,10 +4,14 @@ const Producto = require('../models/productoModelo');
 // Crear un nuevo pedido
 const crearPedido = async (req, res) => {
     try {
-        const { productos } = req.body;
+        const { productos, cliente } = req.body; // Asegúrate de incluir cliente aquí
 
         if (!productos || !Array.isArray(productos) || productos.length === 0) {
             return res.status(400).json({ message: 'Se requiere una lista de productos.' });
+        }
+
+        if (!cliente) {
+            return res.status(400).json({ message: 'Se requiere un cliente para el pedido.' });
         }
 
         // Buscar los productos en la base de datos
@@ -24,7 +28,7 @@ const crearPedido = async (req, res) => {
         const nuevoPedido = new Pedido({
             productos,
             precioTotal,
-            cliente
+            cliente,
         });
 
         await nuevoPedido.save();
